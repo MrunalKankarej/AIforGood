@@ -581,6 +581,7 @@ function renderWorkUpload(onBack, onCreated) {
       productName,
       price,
       hasImage: !!imageData,
+      imageData: imageData || '',
     };
 
     try {

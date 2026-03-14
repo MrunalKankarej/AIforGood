@@ -106,6 +106,38 @@ def _extract_json_block(text):
     return None
 
 
+def _get_image_labels_from_vision(image_base64):
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key or not requests or not image_base64:
+        return []
+
+    # Remove data URI prefix if present
+    if image_base64.startswith('data:'):
+        image_base64 = image_base64.split(',', 1)[1]
+
+    url = f"https://vision.googleapis.com/v1/images:annotate?key={api_key}"
+    payload = {
+        "requests": [
+            {
+                "image": {"content": image_base64},
+                "features": [{"type": "LABEL_DETECTION", "maxResults": 5}]
+            }
+        ]
+    }
+
+    try:
+        r = requests.post(url, json=payload, timeout=15)
+        r.raise_for_status()
+        resp = r.json()
+        labels = []
+        for annotation in resp.get('responses', [{}])[0].get('labelAnnotations', []):
+            labels.append(annotation.get('description', ''))
+        return labels[:5]
+    except Exception as exc:
+        print('Vision API label extraction failed:', exc)
+        return []
+
+
 @app.route("/api/feedback", methods=["POST"])
 def get_pronunciation_feedback():
     data = request.get_json(silent=True) or {}
@@ -170,6 +202,7 @@ def create_etsy_description():
     product_name = (data.get("productName") or "").strip()
     price = (data.get("price") or "").strip()
     has_image = bool(data.get("hasImage", False))
+    imageData = (data.get("imageData") or "").strip()
 
     if not product_name or not price:
         return jsonify({"error": "Missing product name or price."}), 400
@@ -198,6 +231,13 @@ def create_etsy_description():
         })
 
     url = f"https://generativelanguage.googleapis.com/v1beta2/models/{model}:generate?key={api_key}"
+    # image labels injection (vision API version)
+    image_labels = []
+    if imageData:
+        image_labels = _get_image_labels_from_vision(imageData)
+        if image_labels:
+            prompt += "\nImage labels detected: " + ", ".join(image_labels)
+
     payload = {
         "prompt": {"text": prompt},
         "temperature": 0.3,

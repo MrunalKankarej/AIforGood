@@ -33,6 +33,7 @@ function createPhotoCard({ img, title, emoji, color, badge, cornerContent, heigh
   imgEl.src    = img;
   imgEl.alt    = title;
   imgEl.style.height  = height + 'px';
+//  imgEl.style.width  = width + 'px';
   imgEl.style.display = 'none';
   imgEl.addEventListener('load', () => {
     shimmer.remove();

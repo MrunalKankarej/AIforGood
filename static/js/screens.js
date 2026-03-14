@@ -5,23 +5,31 @@
   SCREEN 1 — START
 ══════════════════════════════════════════ */
 function renderStart(onStart) {
- const screen = document.getElementById('screen-start');
- screen.innerHTML = `
-   <div class="start-orbs">
-     <div class="orb orb-1"></div>
-     <div class="orb orb-2"></div>
-     <div class="orb orb-3"></div>
-   </div>
-   <div class="start-logo-ring">
-     <div class="start-logo-inner">BOLI</div>
-   </div>
-   <button class="play-btn" id="play-btn" aria-label="Start">
-     <svg width="38" height="38" viewBox="0 0 24 24" fill="#39d500">
-       <polygon points="5,3 19,12 5,21"/>
-     </svg>
-   </button>
- `;
-
+  const screen = document.getElementById('screen-start');
+  screen.innerHTML = `
+    <div class="start-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="start-logo-ring">
+      <div class="start-logo-inner">A</div>
+    </div>
+    <div class="start-tagline">Learn English</div>
+    <div class="start-sub">Together · Today</div>
+    <button class="play-btn" id="play-btn" aria-label="Start">
+      <svg width="38" height="38" viewBox="0 0 24 24" fill="#FF8A3D">
+        <polygon points="5,3 19,12 5,21"/>
+      </svg>
+    </button>
+    <div class="lang-pills">
+      <div class="lang-pill active">🇺🇸 EN</div>
+      <div class="lang-pill">🇦🇲 HY</div>
+      <div class="lang-pill">🇸🇾 AR</div>
+      <div class="lang-pill">🇺🇦 UK</div>
+      <div class="lang-pill">🇪🇸 ES</div>
+    </div>
+  `;
 
  screen.querySelector('#play-btn').addEventListener('click', () => {
    SFX.nav();
@@ -64,22 +72,21 @@ function renderCategory(categories, onSelect, onBack) {
  list.className = 'cat-list';
 
 
- categories.forEach(cat => {
-   const stars = '⭐'.repeat(cat.stars);
-   const card  = createPhotoCard({
-     img:           cat.img,
-     title:         cat.title,
-     emoji:         cat.emoji,
-     color:         cat.color,
-     badge:         cat.badge,
-     cornerContent: stars,
-     height:        300,
-     extraClass:    'cat-card',
-     onClick: () => { SFX.tap(); onSelect(cat); },
-   });
-   list.appendChild(card);
- });
-
+  categories.forEach(cat => {
+    const stars = '⭐'.repeat(cat.stars);
+    const card  = createPhotoCard({
+      img:           cat.img,
+      title:         cat.title,
+      emoji:         cat.emoji,
+      color:         cat.color,
+      badge:         cat.badge,
+      cornerContent: stars,
+      height:        150,
+      extraClass:    'cat-card',
+      onClick: () => { SFX.tap(); onSelect(cat); },
+    });
+    list.appendChild(card);
+  });
 
  scroll.appendChild(list);
  screen.appendChild(scroll);
@@ -108,22 +115,20 @@ function renderModule(modules, onSelect, onBack) {
  list.className = 'mod-list';
 
 
- modules.forEach(mod => {
-   const corner = mod.icons.join('');
-   const card   = createPhotoCard({
-     img:           mod.img,
-     title:         mod.title,
-     emoji:         mod.emoji,
-     color:         mod.color,
-     cornerContent: corner,
-     height:        190,
-   //  width:        350,
-     extraClass:    'mod-card',
-     onClick: () => { SFX.tap(); onSelect(mod); },
-   });
-   list.appendChild(card);
- });
-
+  modules.forEach(mod => {
+    const corner = mod.icons.join('');
+    const card   = createPhotoCard({
+      img:           mod.img,
+      title:         mod.title,
+      emoji:         mod.emoji,
+      color:         mod.color,
+      cornerContent: corner,
+      height:        190,
+      extraClass:    'mod-card',
+      onClick: () => { SFX.tap(); onSelect(mod); },
+    });
+    list.appendChild(card);
+  });
 
  scroll.appendChild(list);
  screen.appendChild(scroll);

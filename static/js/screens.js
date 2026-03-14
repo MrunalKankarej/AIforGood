@@ -425,12 +425,12 @@ function renderWorkUpload(onBack, onCreated) {
   form.appendChild(categoryLabel);
 
   const categories = [
-    { value: 'Embroidery', label: 'Embroidery', icon: '🧵' },
-    { value: 'Crochet', label: 'Crochet', icon: '🧶' },
-    { value: 'Knitting', label: 'Knitting', icon: '🧶' },
-    { value: 'Candle', label: 'Candle', icon: '🕯️' },
-    { value: 'Jewelry', label: 'Jewelry', icon: '💍' },
-    { value: 'Other', label: 'Other', icon: '✨' },
+   { value: 'Embroidery', label: 'Embroidery', icon: '🧵' },
+   { value: 'Crochet', label: 'Crochet', icon: '🪡' },
+   { value: 'Knitting', label: 'Knitting', icon: '🧶' },
+   { value: 'Candle', label: 'Candle', icon: '🕯️' },
+   { value: 'Jewelry', label: 'Jewelry', icon: '💍' },
+   { value: 'Other', label: 'Other', icon: '✨' },
   ];
 
   let selectedCategory = '';

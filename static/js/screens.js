@@ -177,7 +177,6 @@ function renderLearning(scenario, onBack, onComplete) {
 
 
  let lessonIdx   = 0;
- let answered    = false;
  let isSpeaking  = false;
  let isRecording = false;
  let recTimer    = null;
@@ -240,18 +239,6 @@ function renderLearning(scenario, onBack, onComplete) {
  body.appendChild(wordWrap);
 
 
- // chips label + wrap
- const chipsLabel = document.createElement('div');
- chipsLabel.className   = 'chips-label';
- chipsLabel.textContent = 'TAP THE WORD';
- body.appendChild(chipsLabel);
-
-
- const chipsWrap = document.createElement('div');
- chipsWrap.className = 'chips-wrap';
- body.appendChild(chipsWrap);
-
-
  // action row
  const actionRow = document.createElement('div');
  actionRow.className = 'action-row';
@@ -285,7 +272,6 @@ function renderLearning(scenario, onBack, onComplete) {
  /* ── load a lesson ── */
  function loadLesson() {
    const lesson = scenario.lessons[lessonIdx];
-   answered  = false;
 
 
    // update word / phrase
@@ -303,20 +289,8 @@ function renderLearning(scenario, onBack, onComplete) {
    });
 
 
-   // update chips (shuffled)
-   const choices = [...lesson.choices].sort(() => Math.random() - 0.5);
-   chipsWrap.innerHTML = '';
-   choices.forEach(word => {
-     const chip = document.createElement('div');
-     chip.className   = 'chip';
-     chip.textContent = word;
-     chip.addEventListener('click', () => handleChip(chip, word === lesson.word, lesson.word));
-     chipsWrap.appendChild(chip);
-   });
-
-
    // reset next button
-   nextBtn.classList.remove('ready');
+   nextBtn.classList.add('ready');
    nextBtn.textContent = lessonIdx + 1 >= total ? '🏆' : '➡️';
 
 
@@ -326,32 +300,6 @@ function renderLearning(scenario, onBack, onComplete) {
    setTimeout(() => {
      heroImg.style.opacity = '1';
    }, 200);
- }
-
-
- function handleChip(chip, isCorrect, correctWord) {
-   if (answered) return;
-   answered = true;
-
-
-   // lock all chips
-   chipsWrap.querySelectorAll('.chip').forEach(c => c.classList.add('locked'));
-
-
-   if (isCorrect) {
-     chip.classList.add('correct');
-     showToast('✅');
-     SFX.correct();
-   } else {
-     chip.classList.add('wrong');
-     SFX.wrong();
-     showToast('❌');
-     // reveal correct
-     chipsWrap.querySelectorAll('.chip').forEach(c => {
-       if (c.textContent === correctWord) c.classList.add('reveal');
-     });
-   }
-   nextBtn.classList.add('ready');
  }
 
 
